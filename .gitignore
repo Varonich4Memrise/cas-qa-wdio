@@ -1,0 +1,7 @@
+node_modules
+node_modules
+.env
+allure-results
+logs
+package-lock.json
+debug
