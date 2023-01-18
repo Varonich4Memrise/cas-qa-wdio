@@ -34,7 +34,7 @@ export const config: Options.Testrunner = {
     // will be called from there.
     //
     specs: [
-        './test/features/**/*.feature',
+        './test/helper/apiHelper.ts'
         // ToDo: define location for spec files here
     ],
     // Patterns to exclude.
@@ -132,7 +132,7 @@ export const config: Options.Testrunner = {
     //
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
-    framework: 'cucumber',
+    //framework: 'cucumber',
     //
     // The number of times to retry the entire specfile when it fails as a whole
     // specFileRetries: 1,
