@@ -1,5 +1,7 @@
 import dotenv from "dotenv"
 dotenv.config()
+let headless = process.env.HEADLESS
+
 import type { Options } from '@wdio/types'
 
 
@@ -34,7 +36,8 @@ export const config: Options.Testrunner = {
     // will be called from there.
     //
     specs: [
-        './test/helper/apiHelper.ts'
+        //'./test/testAPI/supertestDemo.ts'
+        './test/testAPI/*.ts'
         // ToDo: define location for spec files here
     ],
     // Patterns to exclude.
@@ -71,7 +74,11 @@ export const config: Options.Testrunner = {
         maxInstances: 5,
         //
         browserName: 'chrome',
-        acceptInsecureCerts: true
+        "goog:chromeOptions": {
+            args: headless.toUpperCase() === "Y" ? ["--disable-web-security", "--headless", "--disable-dev-shm-usage", "--no-sandbox", "--window-size=1920,1080"] : []
+        },
+        acceptInsecureCerts: true,
+        timeouts: {implicit: 15000, pageLoad: 20000, script: 30000},
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs

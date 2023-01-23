@@ -1,8 +1,14 @@
 Feature: Demo Feature
+    This is a demo feature
+    - Questions/clarification
+    - Known issues
+    - Todo
 
-    @demo
-    Scenario Outline: Running first demo feature
+    Background: Launch google page
         Given Google page is opened
+
+    @demo @smoke @debug
+    Scenario Outline: Running first demo feature
         When Search with <SearchItem>
         Then Click on the first search result
         Then URL should match <ExpectedURL>

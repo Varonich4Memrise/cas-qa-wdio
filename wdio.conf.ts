@@ -1,5 +1,7 @@
 import dotenv from "dotenv"
 dotenv.config()
+let headless = process.env.HEADLESS
+
 import type { Options } from '@wdio/types'
 
 
@@ -68,15 +70,36 @@ export const config: Options.Testrunner = {
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
-        maxInstances: 5,
-        //
+        /**
+         * Additional chrome options:
+         * --headless
+         * --disable-dev-shm-usage
+         * --no-sandbox
+         * --window-size=1920,1080
+         * --disable-gpu
+         * --proxy-server=http://domain
+         * binary=<location>
+         * --auth-server-whitelist="_"
+         */
+        maxInstances: 2,
         browserName: 'chrome',
-        acceptInsecureCerts: true
+        "goog:chromeOptions": {
+            args: headless.toUpperCase() === "Y" ? ["--disable-web-security", "--headless", "--disable-dev-shm-usage", "--no-sandbox", "--window-size=1920,1080"] : []
+        },
+        acceptInsecureCerts: true,
+        timeouts: {implicit: 15000, pageLoad: 20000, script: 30000},
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
         // excludeDriverLogs: ['bugreport', 'server'],
-    }],
+    },
+    {
+        maxInstances: 2,
+        browserName: 'firefox',
+        acceptInsecureCerts: true,
+        timeouts: {implicit: 15000, pageLoad: 20000, script: 30000},
+    }
+    ],
     //
     // ===================
     // Test Configurations
@@ -124,8 +147,8 @@ export const config: Options.Testrunner = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['chromedriver'],
-    
+    //services: ['chromedriver', 'geckodriver'],
+    services: ['selenium-standalone'],
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
     // see also: https://webdriver.io/docs/frameworks
@@ -171,7 +194,7 @@ export const config: Options.Testrunner = {
         // <string> (expression) only execute the features or scenarios with tags matching the expression
         tagExpression: '@demo',
         // <number> timeout for step definitions
-        timeout: 60000,
+        timeout: 300000,
         // <boolean> Enable this config to treat undefined definitions as warnings.
         ignoreUndefinedDefinitions: false
     },
